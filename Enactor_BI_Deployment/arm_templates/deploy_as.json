@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "azure_bi_analysisserver_name": {
+            "defaultValue": "prevalas001",
+            "type": "String"
+        },
+        "analysisserver_admin_user": {
+            "defaultValue": "PeterR@enactorsupport.com",
+            "type": "String"
+        },
+        "azure_location_name": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String"
+        },
+        "analysisserver_deployment_tier": {
+            "defaultValue": "D1",
+            "type": "String"
+        },
+        "analysisserver_deployment_tier_type": {
+            "defaultValue": "Development",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.AnalysisServices/servers",
+            "apiVersion": "2017-08-01",
+            "name": "[parameters('azure_bi_analysisserver_name')]",
+            "location": "[parameters('azure_location_name')]",
+            "sku": {
+                "name": "[parameters('analysisserver_deployment_tier')]",
+                "tier": "[parameters('analysisserver_deployment_tier_type')]",
+                "capacity": 1
+            },
+            "properties": {
+                "managedMode": 1,
+                "asAdministrators": {
+                    "members": [
+                        "[parameters('analysisserver_admin_user')]"
+                    ]
+                },
+                "querypoolConnectionMode": "All",
+                "serverMonitorMode": 1
+            }
+        }
+        
+    ]
+}

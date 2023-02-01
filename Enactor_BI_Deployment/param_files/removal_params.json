@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+   "parameters": {
+        "azure_subscription_id": {
+            "value": "89cee0ec-2e9e-4738-8b18-d3cc5a29c156"
+        },
+        "azure_resourcegroup_name": {
+            "value": "en-bi-rg-vkm-1"
+        },
+        "azure_location_name": {
+            "value": "uksouth"
+        },
+        "destroy_databases": {
+            "value": "true"
+        },
+        "purge_keyvaults": {
+            "value": "true"
+        }
+    }
+}
+

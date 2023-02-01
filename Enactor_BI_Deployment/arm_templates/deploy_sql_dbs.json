@@ -1,0 +1,144 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "azure_bi_sqlserver_name": {
+            "defaultValue": "enactordw001",
+            "type": "String"
+        },
+        "azure_bi_sqlserver_admin_user": {
+            "defaultValue": "enactor",
+            "type": "String"
+        },
+        "azure_bi_sqlserver_admin_password": {
+            "defaultValue": "En4ct0r2019",
+            "type": "String"
+        },
+        "azure_location_name": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String"
+        },
+		"dw_database_name":  {
+			"defaultValue":  "EnactorDW",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[parameters('azure_bi_sqlserver_name')]",
+            "location": "[parameters('azure_location_name')]",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "[parameters('azure_bi_sqlserver_admin_user')]",
+                "administratorLoginPassword": "[parameters('azure_bi_sqlserver_admin_password')]",
+                "version": "12.0",
+                "publicNetworkAccess": "Enabled",
+                "restrictOutboundNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/', parameters('dw_database_name'))]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/89cee0ec-2e9e-4738-8b18-d3cc5a29c156/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/', parameters('dw_database_name') ,'_Staging')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": 2147483648,
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readScale": "Disabled",
+                "requestedBackupStorageRedundancy": "Geo",
+                "maintenanceConfigurationId": "/subscriptions/89cee0ec-2e9e-4738-8b18-d3cc5a29c156/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "isLedgerOn": false
+            }
+        },
+
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/EnactorNetwork')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "195.99.223.101",
+                "endIpAddress": "195.99.223.101"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/', parameters('dw_database_name') , '/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('azure_bi_sqlserver_name'), parameters('dw_database_name'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/', parameters('dw_database_name'), '_Staging/Current')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('azure_bi_sqlserver_name'), concat(parameters('dw_database_name'),'_Staging'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "properties": {
+                "state": "Enabled"
+            }
+        }
+        
+    ]
+}

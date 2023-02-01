@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+   "parameters": {
+        "azure_subscription_id": {
+            "value": "89cee0ec-2e9e-4738-8b18-d3cc5a29c156"
+        },
+        "azure_resourcegroup_name": {
+            "value": "en-bi-rg-vkm-1"
+        },
+        "azure_location_name": {
+            "value": "uksouth"
+        },
+        "azure_managed_identity_name": {
+            "value": "en-bi-mi-vkm-1"
+        },
+		"azure_bi_sqlserver_name": {
+            "value": "en-bi-sql-vkm-1"
+        },
+        "azure_bi_sqlserver_admin_user": {
+            "value": "enactor"
+        },
+        "azure_bi_sqlserver_admin_password": {
+            "value": "En4ct0r2019"
+        },
+		"dw_database_name":  {
+			"value":  "EnactorDW"
+        },
+		"azure_bi_analysisserver_name": {
+            "value": "enbiasvkm01"
+        },
+		"azure_bi_database_name": {
+            "value": "EnactorRetailSales"
+        },
+        "analysisserver_admin_user": {
+            "value": "vikum.kulathunga@enactorsupport.com"
+        },
+        "azure_bi_keyvault_name": {
+            "value": "en-bi-kv-vkm-1"
+        },
+        "operational_db_connectionstring": {
+            "value": "server=13.87.65.123;port=3306;database=enactorem;user=enactor;password=En4ct0r2019"
+        },
+		"factory_name":  {
+			"value":  "en-bi-adf-vkm-1"
+        }
+    }
+}
+

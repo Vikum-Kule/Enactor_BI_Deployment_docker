@@ -1,0 +1,336 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    	"azure_bi_sqlserver_name": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "azure_bi_sqlserver_admin_user": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "azure_bi_sqlserver_admin_password": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "azure_bi_keyvault_name": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "dw_db_connectionstring": {
+            "defaultvalue": "[concat('Server=tcp:',parameters('azure_bi_sqlserver_name'),'.database.windows.net,1433;Initial Catalog=EnactorDW;Persist Security Info=False;User ID=',parameters('azure_bi_sqlserver_admin_user'),';Password=',parameters('azure_bi_sqlserver_admin_password'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+            "type": "String"
+        },
+        "staging_db_connectionstring": {
+            "defaultvalue": "[concat('Server=tcp:',parameters('azure_bi_sqlserver_name'),'.database.windows.net,1433;Initial Catalog=EnactorDW_Staging;Persist Security Info=False;User ID=',parameters('azure_bi_sqlserver_admin_user'),';Password=',parameters('azure_bi_sqlserver_admin_password'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+            "type": "String"
+        },
+        "operational_db_connectionstring": {
+            "defaultvalue": "example Operational Connection String",
+            "type": "String"
+        },
+        "azure_location_name": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String"
+        },
+        "azure_tenant_id": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "azure_user_object_id": {
+            "defaultValue": "null",
+            "type": "String"
+        },
+        "azure_adf_mi_object_id": {
+            "defaultValue": "null",
+            "type": "String"
+        }
+        
+    },
+    "variables": {},
+    "resources": [
+        
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[parameters('azure_bi_keyvault_name')]",
+            "location": "[parameters('azure_location_name')]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "tenantId": "[parameters('azure_tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[parameters('azure_tenant_id')]",
+                        "objectId": "[parameters('azure_adf_mi_object_id')]",
+                        "permissions": {
+                            "keys": [],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": []
+                        }
+                    },
+                    {
+                        "tenantId": "[parameters('azure_tenant_id')]",
+                        "objectId": "[parameters('azure_user_object_id')]",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "GetRotationPolicy",
+                                "SetRotationPolicy",
+                                "Rotate"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "ManageContacts",
+                                "ManageIssuers",
+                                "GetIssuers",
+                                "ListIssuers",
+                                "SetIssuers",
+                                "DeleteIssuers"
+                            ]
+                        }
+                    }
+                ],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": false,
+                "vaultUri": "[concat('https://',parameters('azure_bi_keyvault_name'),'.vault.azure.net/')]",
+                "provisioningState": "Succeeded",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('azure_bi_keyvault_name'), '/EnactorBI-DataWarehouseDB-ConnectionString')]",
+            "location": "[parameters('azure_location_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('azure_bi_keyvault_name'))]"
+            ],
+            "properties": {
+            	"value": "[parameters('dw_db_connectionstring')]",
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('azure_bi_keyvault_name'), '/EnactorBI-StagingDB-ConnectionString')]",
+            "location": "[parameters('azure_location_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('azure_bi_keyvault_name'))]"
+            ],
+            "properties": {
+            	"value": "[parameters('staging_db_connectionstring')]",
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('azure_bi_keyvault_name'), '/Enactor-OperationalDB-ConnectionString')]",
+            "location": "[parameters('azure_location_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('azure_bi_keyvault_name'))]"
+            ],
+            "properties": {
+            	"value": "[parameters('operational_db_connectionstring')]",
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+    
+        
+    ]
+}
+
+
+
+
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vaults_BI_KeyVault_007_name": {
+            "defaultValue": "BI-KeyVault-007",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[parameters('vaults_BI_KeyVault_007_name')]",
+            "location": "uksouth",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "tenantId": "0e81f23b-8b67-4f1f-832b-ee8815c8ef62",
+                "accessPolicies": [
+                    {
+                        "tenantId": "0e81f23b-8b67-4f1f-832b-ee8815c8ef62",
+                        "objectId": "6dea1648-7385-4897-ae4c-81902379b902",
+                        "permissions": {
+                            "keys": [],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": []
+                        }
+                    },
+                    {
+                        "tenantId": "0e81f23b-8b67-4f1f-832b-ee8815c8ef62",
+                        "objectId": "0566b756-766b-4316-8796-ecba0fb2426d",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "GetRotationPolicy",
+                                "SetRotationPolicy",
+                                "Rotate"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "ManageContacts",
+                                "ManageIssuers",
+                                "GetIssuers",
+                                "ListIssuers",
+                                "SetIssuers",
+                                "DeleteIssuers"
+                            ]
+                        }
+                    }
+                ],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": false,
+                "vaultUri": "https://bi-keyvault-007.vault.azure.net/",
+                "provisioningState": "Succeeded",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('vaults_BI_KeyVault_007_name'), '/EnactorBI-DataWarehouseDB-ConnectionString')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_BI_KeyVault_007_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('vaults_BI_KeyVault_007_name'), '/EnactorBI-StagingDB-ConnectionString')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_BI_KeyVault_007_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[concat(parameters('vaults_BI_KeyVault_007_name'), '/Enactor-OperationalDB-ConnectionString')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_BI_KeyVault_007_name'))]"
+            ],
+            "properties": {
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        }
+    ]
+}
