@@ -6,16 +6,16 @@
             "value": "89cee0ec-2e9e-4738-8b18-d3cc5a29c156"
         },
         "azure_resourcegroup_name": {
-            "value": "en-bi-rg-vkm-1"
+            "value": "en-bi-rg-vkm-2"
         },
         "azure_location_name": {
             "value": "uksouth"
         },
         "azure_managed_identity_name": {
-            "value": "en-bi-mi-vkm-1"
+            "value": "en-bi-mi-vkm-2"
         },
 		"azure_bi_sqlserver_name": {
-            "value": "en-bi-sql-vkm-1"
+            "value": "en-bi-sql-vkm-2"
         },
         "azure_bi_sqlserver_admin_user": {
             "value": "enactor"
@@ -36,13 +36,13 @@
             "value": "vikum.kulathunga@enactorsupport.com"
         },
         "azure_bi_keyvault_name": {
-            "value": "en-bi-kv-vkm-1"
+            "value": "en-bi-kv-vkm-2"
         },
         "operational_db_connectionstring": {
             "value": "server=13.87.65.123;port=3306;database=enactorem;user=enactor;password=En4ct0r2019"
         },
 		"factory_name":  {
-			"value":  "en-bi-adf-vkm-1"
+			"value":  "en-bi-adf-vkm-2"
         }
     }
 }
