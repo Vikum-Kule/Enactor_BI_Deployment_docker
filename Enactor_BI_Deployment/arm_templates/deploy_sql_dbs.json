@@ -111,8 +111,8 @@
                 "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
             ],
             "properties": {
-                "startIpAddress": "195.99.223.101",
-                "endIpAddress": "195.99.223.101"
+                "startIpAddress": "['195.99.223.101', '18.132.173.135']",
+                "endIpAddress": "['195.99.223.101', '18.132.173.135']"
             }
         },
         {
