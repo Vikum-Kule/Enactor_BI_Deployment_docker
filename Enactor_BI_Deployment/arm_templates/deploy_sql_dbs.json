@@ -111,8 +111,20 @@
                 "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
             ],
             "properties": {
-                "startIpAddress": "['195.99.223.101', '18.132.173.135']",
-                "endIpAddress": "['195.99.223.101', '18.132.173.135']"
+                "startIpAddress": "195.99.223.101",
+                "endIpAddress": "195.99.223.101"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2021-08-01-preview",
+            "name": "[concat(parameters('azure_bi_sqlserver_name'), '/TestPortalNode')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('azure_bi_sqlserver_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "18.132.173.135",
+                "endIpAddress": "18.132.173.135"
             }
         },
         {
