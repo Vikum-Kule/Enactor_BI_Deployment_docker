@@ -33,11 +33,11 @@
 # P9 - Ensure you are on a server with permitted access to the Azure servers (e.g. Enactor Network or VPN)
 
 
-# Deployment Script files will be in    ./Enactor_BI_Deployment/deployment_scripts
-# Parameter files will be in ./Enactor_BI_Deployment/param_files
-# DB SQL Script files will be in ./Enactor_BI_Databases (once the SQL Script repo has been cloned
+# Deployment Script files will be in    Enactor_BI_Deployment/deployment_scripts
+# Parameter files will be in Enactor_BI_Deployment/param_files
+# DB SQL Script files will be in Enactor_BI_Databases (once the SQL Script repo has been cloned
 
-# Execute ./Enactor_BI_Deployment/deployment_scripts/DeploymentProcess.ps1
+# Execute Enactor_BI_Deployment/deployment_scripts/DeploymentProcess.ps1
 
 $ScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/deployment_scripts"
 $ParamFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/param_files"
@@ -138,19 +138,19 @@ $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name a
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_name -Value @{value="$azure_bi_sqlserver_name"} -Force
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_admin_user -Value @{value="$azure_bi_sqlserver_admin_user"} -Force
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_admin_password -Value @{value="$azure_bi_sqlserver_admin_password"} -Force
-$deploy_keyvault_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_keyvault_params.json
+$deploy_keyvault_params | ConvertTo-Json | Out-File $ParamFolder/deploy_keyvault_params.json
 
-$deploy_sql_dbs_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_sql_dbs_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_sql_dbs_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_name -Value @{value="$azure_bi_sqlserver_name"} -Force
 $deploy_sql_dbs_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_admin_user -Value @{value="$azure_bi_sqlserver_admin_user"} -Force
 $deploy_sql_dbs_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_sqlserver_admin_password -Value @{value="$azure_bi_sqlserver_admin_password"} -Force
 $deploy_sql_dbs_params.parameters | Add-Member -MemberType NoteProperty -Name dw_database_name -Value @{value="$dw_database_name"} -Force
-$deploy_sql_dbs_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_sql_dbs_params.json
+$deploy_sql_dbs_params | ConvertTo-Json | Out-File $ParamFolder/deploy_sql_dbs_params.json
 
-$deploy_as_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_as_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_as_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_analysisserver_name -Value @{value="$azure_bi_analysisserver_name"} -Force
 $deploy_as_params.parameters | Add-Member -MemberType NoteProperty -Name analysisserver_admin_user -Value @{value="$analysisserver_admin_user"} -Force
-$deploy_as_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_as_params.json
+$deploy_as_params | ConvertTo-Json | Out-File $ParamFolder/deploy_as_params.json
 
 
 
@@ -198,31 +198,31 @@ sqlcmd -S "$azure_bi_sqlserver_name.database.windows.net" -d $dw_database_name -
 
 # D1. Populate ADF Factory Parameters files
 
-$deploy_adf_factory_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_adf_factory_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_adf_factory_params.parameters | Add-Member -MemberType NoteProperty -Name factory_name -Value @{value="$factory_name"} -Force
 $deploy_adf_factory_params.parameters | Add-Member -MemberType NoteProperty -Name azure_tenant_id -Value @{value="$azure_tenant_id"} -Force
 $deploy_adf_factory_params.parameters | Add-Member -MemberType NoteProperty -Name azure_managed_identity_name -Value @{value="$azure_managed_identity_name"} -Force
-$deploy_adf_factory_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_adf_factory_params.json
+$deploy_adf_factory_params | ConvertTo-Json | Out-File $ParamFolder/deploy_adf_factory_params.json
 
-$deploy_adf_credentials_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_adf_credentials_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_adf_credentials_params.parameters | Add-Member -MemberType NoteProperty -Name factory_name -Value @{value="$factory_name"} -Force
 $deploy_adf_credentials_params.parameters | Add-Member -MemberType NoteProperty -Name azure_subscription_id -Value @{value="$azure_subscription_id"} -Force
 $deploy_adf_credentials_params.parameters | Add-Member -MemberType NoteProperty -Name azure_resourcegroup_name -Value @{value="$resourcegroup_name"} -Force
 $deploy_adf_credentials_params.parameters | Add-Member -MemberType NoteProperty -Name azure_managed_identity_name -Value @{value="$azure_managed_identity_name"} -Force
-$deploy_adf_credentials_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_adf_credentials_params.json
+$deploy_adf_credentials_params | ConvertTo-Json | Out-File $ParamFolder/deploy_adf_credentials_params.json
 
-$deploy_adf_linked_services_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_adf_linked_services_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_adf_linked_services_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_keyvault_name -Value @{value="$azure_bi_keyvault_name"} -Force
 $deploy_adf_linked_services_params.parameters | Add-Member -MemberType NoteProperty -Name factory_name -Value @{value="$factory_name"} -Force
 $deploy_adf_linked_services_params.parameters | Add-Member -MemberType NoteProperty -Name azure_managed_identity_name -Value @{value="$azure_managed_identity_name"} -Force
-$deploy_adf_linked_services_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_adf_linked_services_params.json
+$deploy_adf_linked_services_params | ConvertTo-Json | Out-File $ParamFolder/deploy_adf_linked_services_params.json
 
-$deploy_adf_dataflows_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_adf_dataflows_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_adf_dataflows_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_keyvault_name -Value @{value="$azure_bi_keyvault_name"} -Force
 $deploy_adf_dataflows_params.parameters | Add-Member -MemberType NoteProperty -Name factory_name -Value @{value="$factory_name"} -Force
-$deploy_adf_dataflows_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_adf_dataflows_params.json
+$deploy_adf_dataflows_params | ConvertTo-Json | Out-File $ParamFolder/deploy_adf_dataflows_params.json
 
-$deploy_adf_pipelines_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_adf_pipelines_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_keyvault_name -Value @{value="$azure_bi_keyvault_name"} -Force
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name factory_name -Value @{value="$factory_name"} -Force
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name azure_tenant_id -Value @{value="$azure_tenant_id"} -Force
@@ -231,7 +231,7 @@ $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -N
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_analysisserver_name -Value @{value="$azure_bi_analysisserver_name"} -Force
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_database_name -Value @{value="$azure_bi_database_name"} -Force
 $deploy_adf_pipelines_params.parameters | Add-Member -MemberType NoteProperty -Name azure_resourcegroup_name -Value @{value="$resourcegroup_name"} -Force
-$deploy_adf_pipelines_params | ConvertTo-Json | Out-File ./$ParamFolder/deploy_adf_pipelines_params.json
+$deploy_adf_pipelines_params | ConvertTo-Json | Out-File $ParamFolder/deploy_adf_pipelines_params.json
 
 
 # D2. Deploy ADF Factory (incl Managed Identity) - use original script, not Github ARM template

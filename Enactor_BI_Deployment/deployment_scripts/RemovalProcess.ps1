@@ -24,11 +24,11 @@
 # P9 - Ensure you are on a server with permitted access to the Azure servers (e.g. Enactor Network or VPN)
 
 
-# Deployment Script files will be in    ./Enactor_BI_Deployment/deployment_scripts
-# Parameter files will be in ./Enactor_BI_Deployment/param_files
-# DB SQL Script files will be in ./Enactor_BI_Databases (once the SQL Script repo has been cloned
+# Deployment Script files will be in    Enactor_BI_Deployment/deployment_scripts
+# Parameter files will be in Enactor_BI_Deployment/param_files
+# DB SQL Script files will be in Enactor_BI_Databases (once the SQL Script repo has been cloned
 
-# Execute ./Enactor_BI_Deployment/deployment_scripts/RemovalProcess.ps1
+# Execute Enactor_BI_Deployment/deployment_scripts/RemovalProcess.ps1
 
 $ScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/deployment_scripts"
 $ParamFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/param_files"

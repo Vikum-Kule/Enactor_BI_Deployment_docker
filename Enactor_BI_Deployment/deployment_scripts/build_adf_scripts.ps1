@@ -3,7 +3,7 @@
 # One template file is created for each category (dataflows, pipelines, etc.)
 
 $armTemplateFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/arm_templates"
-$checkedOutArmFolder = "./$armTemplateFolder/checkedout"
+$checkedOutArmFolder = "$armTemplateFolder/checkedout"
 
 # Set Up Parameter Objects
 
