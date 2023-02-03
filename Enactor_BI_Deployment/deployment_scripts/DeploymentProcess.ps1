@@ -129,7 +129,7 @@ $azure_adf_mi_object_id = $identityDetails.PrincipalId
 
 # B4. Add required settings to KeyVault Parameter file, DBs and AS Param files
 
-$deploy_keyvault_params = Get-Content -Raw -Path ./$ParamFolder/template_params.json | Convertfrom-Json
+$deploy_keyvault_params = Get-Content -Raw -Path $ParamFolder/template_params.json | Convertfrom-Json
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name azure_bi_keyvault_name -Value @{value="$azure_bi_keyvault_name"} -Force
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name operational_db_connectionstring -Value @{value="$operational_db_connectionstring"} -Force
 $deploy_keyvault_params.parameters | Add-Member -MemberType NoteProperty -Name azure_tenant_id -Value @{value="$azure_tenant_id"} -Force
