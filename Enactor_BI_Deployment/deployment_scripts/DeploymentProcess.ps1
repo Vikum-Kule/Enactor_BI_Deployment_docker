@@ -39,10 +39,10 @@
 
 # Execute ./Enactor_BI_Deployment/deployment_scripts/DeploymentProcess.ps1
 
-$ScriptFolder = "./Enactor_BI_Deployment/deployment_scripts"
-$ParamFolder = "./Enactor_BI_Deployment/param_files"
-$DBScriptFolder = "./Enactor_BI_Deployment/database_scripts"
-$armTemplateFolder = "./Enactor_BI_Deployment/arm_templates"
+$ScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/deployment_scripts"
+$ParamFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/param_files"
+$DBScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/database_scripts"
+$armTemplateFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/arm_templates"
 
 # Step A - Preparation
 
