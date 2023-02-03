@@ -2,7 +2,7 @@
 # From the ARM templates committed to github by the ADF tools
 # One template file is created for each category (dataflows, pipelines, etc.)
 
-$armTemplateFolder = "./Enactor_BI_Deployment/arm_templates"
+$armTemplateFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/arm_templates"
 $checkedOutArmFolder = "./$armTemplateFolder/checkedout"
 
 # Set Up Parameter Objects

@@ -1,7 +1,7 @@
 # Get Parameter values from AS Model Parameter file
 
-$ScriptFolder = "./Enactor_BI_Deployment/deployment_scripts"
-$ParamFolder = "./Enactor_BI_Deployment/param_files"
+$ScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/deployment_scripts"
+$ParamFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/param_files"
 
 
 #set credentials when run Invoke-ASCmd
@@ -30,7 +30,7 @@ $dw_database_name = $deployment_params.parameters.dw_database_name.value
 # Local Parameters
 $ASServer= "asazure://${azure_location_name}.asazure.windows.net/${azure_bi_analysisserver_name}"
 
-$modelFolder = "./Enactor_BI_Deployment/model"
+$modelFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/model"
 # $msBuildPath = "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/msbuild.exe"
 # $asDeploymentPath = "C:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/IDE/Microsoft.AnalysisServices.Deployment.exe"
 

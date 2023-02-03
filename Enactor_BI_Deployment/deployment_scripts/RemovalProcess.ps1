@@ -30,9 +30,9 @@
 
 # Execute ./Enactor_BI_Deployment/deployment_scripts/RemovalProcess.ps1
 
-$ScriptFolder = "./Enactor_BI_Deployment/deployment_scripts"
-$ParamFolder = "./Enactor_BI_Deployment/param_files"
-$DBScriptFolder = "./Enactor_BI_Databases"
+$ScriptFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/deployment_scripts"
+$ParamFolder = "/home/jenkins/powershell/Enactor_BI_Deployment/param_files"
+$DBScriptFolder = "/home/jenkins/powershell/Enactor_BI_Databases"
 
 # Step A - Preparation
 
