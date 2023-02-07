@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+     "parameters": {
+          "user": {
+              "value": "vikum.kulathunga@enactorsupport.com"
+          },
+          "password": {
+              "value": "Vmk@$$56"
+          },
+          "tenent_id": {
+              "value": "0e81f23b-8b67-4f1f-832b-ee8815c8ef62"
+          },
+          "subscription_id": {
+              "value": "89cee0ec-2e9e-4738-8b18-d3cc5a29c156"
+          },
+          "gh_token": {
+              "value": "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"
+          }
+      }
+  }
