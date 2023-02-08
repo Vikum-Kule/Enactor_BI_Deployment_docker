@@ -36,16 +36,20 @@ $DBScriptFolder = "/home/jenkins/powershell/Enactor_BI_Databases"
 
 # Step A - Preparation
 
+#get parameters for login
+$login_params = Get-Content -Raw -Path $ParamFolder/login_params.json | Convertfrom-Json
+$azure_user = $login_params.parameters.user.value
+$azure_password = $login_params.parameters.password.value
+$azure_tenent_id = $login_params.parameters.tenent_id.value
+$azure_subscription_id = $login_params.parameters.subscription_id.value
+$gh_token = $login_params.parameters.gh_token.value
+
 # A1. Log in to Azure (this may launch an interactive login window). Log in to an account who has credentials belonging to the required subscription.
 
 # Connect-AzAccount -Tenant '0e81f23b-8b67-4f1f-832b-ee8815c8ef62' -SubscriptionId '89cee0ec-2e9e-4738-8b18-d3cc5a29c156'
-$User = "vikum.kulathunga@enactorsupport.com"
-$PWord = ConvertTo-SecureString -String 'Vmk@$$56' -AsPlainText -Force
-$tenant = "0e81f23b-8b67-4f1f-832b-ee8815c8ef62"
-$subscription = "89cee0ec-2e9e-4738-8b18-d3cc5a29c156"
-$Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $User,$PWord
-Connect-AzAccount -Credential $Credential -Tenant $tenant -Subscription $subscription
-
+$PWord = ConvertTo-SecureString -String $azure_password -AsPlainText -Force
+$Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $azure_user,$PWord
+Connect-AzAccount -Credential $Credential -Tenant $azure_tenent_id -Subscription $azure_subscription_id
 
 
 
